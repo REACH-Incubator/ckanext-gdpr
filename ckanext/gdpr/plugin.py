@@ -1,10 +1,18 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
+from ckan.logic.create import user_create
+from ckanext.gdpr.model import setup as model_setup
+
+
+def gdpr_user_create(context, data_dict):
+    user_dict = user_create(context, data_dict)
 
 
 class GdprPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IRoutes, inherit=True)
+    plugins.implements(plugins.IActions, inherit=True)
+    plugins.implements(plugins.IConfigurable, inherit=True)
 
     # IConfigurer
 
@@ -21,3 +29,13 @@ class GdprPlugin(plugins.SingletonPlugin):
                     action='register')
 
         return map
+
+    # IActions
+
+    def get_actions(self):
+        return {'user_create': gdpr_user_create}
+
+    # IConfigurable
+
+    def configure(self, config):
+        model_setup()
