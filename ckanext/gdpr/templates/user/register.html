@@ -13,7 +13,7 @@
 
   {{ form.textarea("gdpr-text", id="field-gdpr-text", label=_("Terms of use"), value="", rows=15, attrs={'readonly': True}) }}
 
-  {{ form.checkbox("gdpr_accept", id="field-gdpr-accept", label=_("I accept the terms of use"), value=True) }}
+  {{ form.checkbox("terms_of_use", id="field-terms-of-use", label=_("I accept the terms of use"), value=True) }}
 
   {% if g.recaptcha_publickey %}
     {% snippet "user/snippets/recaptcha.html", public_key=g.recaptcha_publickey %}

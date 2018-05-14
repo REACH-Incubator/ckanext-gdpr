@@ -6,6 +6,7 @@ from ckan.logic.validators import (ignore_not_sysadmin, name_validator,
                                    user_password_not_empty,
                                    user_password_validator,
                                    user_passwords_match)
+from ckanext.gdpr.validators import gdpr_accepted
 
 
 def default_user_schema():
@@ -25,7 +26,7 @@ def default_user_schema():
         'reset_key': [ignore],
         'activity_streams_email_notifications': [ignore_missing],
         'state': [ignore_missing],
-        'gdpr_accept': [not_empty]
+        'terms_of_use': [gdpr_accepted]
     }
     return schema
 
