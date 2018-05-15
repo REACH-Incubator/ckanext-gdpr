@@ -99,8 +99,6 @@ def define_gdpr_accept_table():
                ForeignKey('gdpr_policy.id',
                           ondelete='CASCADE',
                           onupdate='CASCADE'),
-               nullable=False),
-        Column('accepted', types.Boolean,
                nullable=False)
     )
 

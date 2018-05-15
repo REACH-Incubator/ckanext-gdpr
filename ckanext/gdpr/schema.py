@@ -6,6 +6,7 @@ from ckan.logic.validators import (ignore_not_sysadmin, name_validator,
                                    user_password_not_empty,
                                    user_password_validator,
                                    user_passwords_match)
+from ckanext.gdpr.model import GDPR, GDPRPolicy
 from ckanext.gdpr.validators import gdpr_accepted
 
 
@@ -26,8 +27,12 @@ def default_user_schema():
         'reset_key': [ignore],
         'activity_streams_email_notifications': [ignore_missing],
         'state': [ignore_missing],
-        'terms_of_use': [gdpr_accepted]
     }
+    gdpr = GDPR.get()
+    policies = GDPRPolicy.filter(gdpr_id=gdpr.id)
+    for policy in policies:
+        if policy.required:
+            schema['policy-{}'.format(policy.id)] = [gdpr_accepted]
     return schema
 
 

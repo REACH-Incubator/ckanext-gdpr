@@ -11,9 +11,28 @@
   {{ form.input("password1", id="field-password", label=_("Password"), type="password", placeholder="••••••••", value=data.password1, error=errors.password1, classes=["control-medium"]) }}
   {{ form.input("password2", id="field-confirm-password", label=_("Confirm"), type="password", placeholder="••••••••", value=data.password2, error=errors.password1, classes=["control-medium"]) }}
 
-  {{ form.textarea("gdpr-text", id="field-gdpr-text", label=_("Terms of use"), value="", rows=15, attrs={'readonly': True}) }}
+  <div class="control-group control-full">
+    <label class="control-label" for="field-gdpr-text">Terms of use</label>
+    <div class="controls ">
+      <textarea id="field-gdpr-text" name="gdpr-text" cols="20" rows="15" placeholder="" readonly="True">{{h.get_gdpr().tos}}</textarea>
+    </div>
+  </div>
 
-  {{ form.checkbox("terms_of_use", id="field-terms-of-use", label=_("I accept the terms of use"), value=True) }}
+  {% for policy in h.get_policies(h.get_gdpr().id) %}
+    <div class="control-group">
+      <div class="controls">
+        <label class="checkbox" for="field-terms-of-use">
+          <input name="policy-{{ policy.id }}" id="policy-{{ policy.id }}" value="True" type="checkbox">
+          {{ policy.content }}
+          {% if policy.required %}
+            <span title="This field is required" class="control-required">*</span>
+          {% endif %}
+        </label>
+      </div>
+    </div>
+  {% endfor %}
+
+  {{ form.required_message() }}
 
   {% if g.recaptcha_publickey %}
     {% snippet "user/snippets/recaptcha.html", public_key=g.recaptcha_publickey %}
