@@ -1,0 +1,93 @@
+{% extends 'page.html' %}
+
+{% block subtitle %}{{ _('Terms of Service') }}{% endblock %}
+
+{% block breadcrumb_content %}
+  <li class="active">{{ h.nav_link(_('Terms of Service'), controller='ckanext.gdpr.controller:GDPRController', action='gdpr') }}</li>
+{% endblock %}
+
+{% block primary_content %}
+  <article class="module">
+    <div class="module-content">
+      {% block primary_content_inner %}
+      <h1 class="page-heading">
+        {% block page_heading %}{{ _('Define the Terms of Service') }}{% endblock %}
+      </h1>
+      <form action="POST" class="form-horizontal">
+        <div class="control-group">
+          <label class="control-label" for="tos">Terms of Service</label>
+          <div class="controls">
+            <textarea class="form-control" style="min-width: 80%" id="tos" placeholder="Enter your TOS here..." rows="5" cols="20">{{ c.tos }}</textarea>
+          </div>
+        </div>
+        <div id="policies">
+          <legend>Policies <button type="button" class="btn btn-success" onclick="javascript:addPolicy();"><i class="fa fa-plus" aria-hidden="true"></i></button></legend>
+          {% if c.policies %}
+            {% for policy in c.policies %}
+              {{ policy }}
+            {% endfor %}
+          {% else %}
+            <div class="control-group">
+              <label class="control-label" for="policy-0">New Policy</label>
+              <div class="controls">
+                <input type="text" id="policy-0" placeholder="Describe here your policy..." style="min-width: 80%">
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <label class="checkbox">
+                  <input type="checkbox"> Required
+                </label>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </form>
+      {% endblock %}
+    </div>
+  </article>
+{% endblock %}
+
+{% block secondary_content %}
+  {% block help %}
+  <section class="module module-narrow module-shallow">
+    {% block help_inner %}
+    <h2 class="module-heading">{{ _('Define Terms of Service') }}</h2>
+    <div class="module-content">
+      <p>{% trans %}Define Terms of Service, policies and check who has accepted them{% endtrans %}</p>
+    </div>
+    {% endblock %}
+  </section>
+  {% endblock %}
+{% endblock %}
+
+
+{% block scripts %}
+  {{ super() }}
+
+  <script>
+
+    var policyCounter = 1;
+
+    function addPolicy() {
+      var policyHTML = `
+      <div class="control-group">
+        <label class="control-label" for="policy-${policyCounter}">New Policy</label>
+        <div class="controls">
+          <input type="text" id="policy-${policyCounter}" placeholder="Describe here your policy..." style="min-width: 80%">
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <label class="checkbox">
+            <input type="checkbox"> Required
+          </label>
+        </div>
+      </div>
+      `;
+
+      $('#policies').append(policyHTML);
+      policyCounter += 1;
+    }
+  </script>
+{% endblock %}

@@ -100,11 +100,6 @@ def define_gdpr_accept_table():
                           ondelete='CASCADE',
                           onupdate='CASCADE'),
                nullable=False),
-        Column('gdpr_id', types.Integer,
-               ForeignKey('gdpr.id',
-                          ondelete='CASCADE',
-                          onupdate='CASCADE'),
-               nullable=False),
         Column('accepted', types.Boolean,
                nullable=False)
     )
@@ -152,6 +147,11 @@ def define_gdpr_policy_table():
         Column('content', types.UnicodeText,
                nullable=False),
         Column('required', types.Boolean,
+               nullable=False),
+        Column('gdpr_id', types.Integer,
+               ForeignKey('gdpr.id',
+                          ondelete='CASCADE',
+                          onupdate='CASCADE'),
                nullable=False),
     )
 
