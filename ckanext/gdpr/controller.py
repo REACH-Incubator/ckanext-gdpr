@@ -28,7 +28,8 @@ class GDPRController(toolkit.BaseController):
             c.policies = {}
             if gdpr is not None:
                 c.tos = gdpr.tos
-                c.policies = GDPRPolicy.filter(gdpr_id=gdpr.id)
+                c.policies = GDPRPolicy.filter(gdpr_id=gdpr.id).order_by(
+                    GDPRPolicy.id)
 
             return toolkit.render('gdpr/gdpr.html')
 
@@ -38,9 +39,11 @@ class GDPRController(toolkit.BaseController):
                 GDPR.create(
                     tos=request.POST.get('tos')
                 )
-                gdpr = GDPR.get()
+            else:
+                gdpr.tos = request.POST.get('tos')
 
             # Create new policies
+            log.debug('Creating new policies')
             for key in request.POST.iterkeys():
                 if key.startswith('policy-'):
                     required = False
@@ -51,6 +54,18 @@ class GDPRController(toolkit.BaseController):
                         required=required,
                         gdpr_id=gdpr.id
                     )
+
+            # Update existing policies
+            for key in request.POST.iterkeys():
+                if not key.startswith(('policy-', 'required-', 'tos')):
+                    required = False
+                    if 'required-{}'.format(key) in request.POST:
+                        required = True
+                    policy = GDPRPolicy.get(id=key)
+                    policy.content = request.POST.get(key)
+                    policy.required = required
+                    policy.save()
+                    model.repo.commit()
 
             model.repo.commit()
 

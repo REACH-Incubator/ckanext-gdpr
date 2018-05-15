@@ -34,7 +34,7 @@
                 <div class="control-group">
                   <div class="controls">
                     <label class="checkbox">
-                      <input name= "required-{{policy.id}}" id="policy-{{policy.id}}-required" type="checkbox"> Required
+                      <input name= "required-{{policy.id}}" id="policy-{{policy.id}}-required" type="checkbox" {% if policy.required %}checked{% endif %}> Required
                     </label>
                   </div>
                 </div>
@@ -102,7 +102,7 @@
         <div class="control-group">
           <div class="controls">
             <label class="checkbox">
-              <input name= "required-policy-${policyCounter}" id="policy-${policyCounter}-required" type="checkbox"> Required
+              <input name="required-policy-${policyCounter}" id="policy-${policyCounter}-required" type="checkbox"> Required
             </label>
           </div>
         </div>
