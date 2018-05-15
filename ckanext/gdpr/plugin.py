@@ -27,6 +27,13 @@ def get_policies(gdpr_id):
     return GDPRPolicy.filter(gdpr_id=gdpr_id).order_by(GDPRPolicy.id)
 
 
+def check_user_accepted_policy(user_id, policy_id):
+    gdpr_accept = GDPRAccept.get(user_id=user_id, policy_id=policy_id)
+    if gdpr_accept is not None:
+        return True
+    return False
+
+
 class GdprPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IRoutes, inherit=True)
@@ -47,6 +54,9 @@ class GdprPlugin(plugins.SingletonPlugin):
         map.connect('/user/register',
                     controller='ckanext.gdpr.controller:GDPRUserController',
                     action='register')
+        map.connect('/user/edit/{id}',
+                    controller='ckanext.gdpr.controller:GDPRUserController',
+                    action='edit')
         map.connect('/gdpr',
                     controller='ckanext.gdpr.controller:GDPRController',
                     action='gdpr')
@@ -73,4 +83,5 @@ class GdprPlugin(plugins.SingletonPlugin):
 
     def get_helpers(self):
         return {'get_gdpr': get_gdpr,
-                'get_policies': get_policies}
+                'get_policies': get_policies,
+                'check_user_accepted_policy': check_user_accepted_policy}

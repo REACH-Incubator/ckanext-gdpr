@@ -14,6 +14,7 @@ log = logging.getLogger(__name__)
 
 class GDPRUserController(UserController):
     new_user_form = 'user/register.html'
+    edit_user_form = 'user/gdpr_edit_user_form.html'
 
     def _save_new(self, context):
         context['schema'] = schema.user_new_form_schema()
