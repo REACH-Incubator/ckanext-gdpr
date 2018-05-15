@@ -12,9 +12,36 @@ log = logging.getLogger(__name__)
 
 gdpr_accept_table = None
 gdpr_policy_table = None
+gdpr_table = None
 
 
 def setup():
+    if gdpr_table is None:
+        define_gdpr_table()
+        log.debug('GDPRTable table defined in memory')
+
+    if model.resource_table.exists():
+        if not gdpr_table.exists():
+            gdpr_table.create()
+            log.debug('GDPRTable table create')
+        else:
+            log.debug('GDPRTable table already exists')
+    else:
+        log.debug('GDPRTable table creation deferred')
+
+    if gdpr_policy_table is None:
+        define_gdpr_policy_table()
+        log.debug('GDPRPolicyTable table defined in memory')
+
+    if model.resource_table.exists():
+        if not gdpr_policy_table.exists():
+            gdpr_policy_table.create()
+            log.debug('GDPRPolicyTable table create')
+        else:
+            log.debug('GDPRPolicyTable table already exists')
+    else:
+        log.debug('GDPRPolicyTable table creation deferred')
+
     if gdpr_accept_table is None:
         define_gdpr_accept_table()
         log.debug('GDPRAcceptTable table defined in memory')
@@ -27,19 +54,6 @@ def setup():
             log.debug('GDPRAcceptTable table already exists')
     else:
         log.debug('GDPRAcceptTable table creation deferred')
-
-    if gdpr_policy_table is None:
-        define_gdpr_policy_table()
-        log.debug('GDPRPolicyTable table defined in memory')
-
-    if model.reosurce_table.exists():
-        if not gdpr_policy_table.exists():
-            gdpr_policy_table.create()
-            log.debug('GDPRPolicyTable table create')
-        else:
-            log.debug('GDPRPolicyTable table already exists')
-    else:
-        log.debug('GDPRPolicyTable table creation deferred')
 
 
 class GDPRAccept(DomainObject):
@@ -86,15 +100,19 @@ def define_gdpr_accept_table():
                           ondelete='CASCADE',
                           onupdate='CASCADE'),
                nullable=False),
+        Column('gdpr_id', types.Integer,
+               ForeignKey('gdpr.id',
+                          ondelete='CASCADE',
+                          onupdate='CASCADE'),
+               nullable=False),
         Column('accepted', types.Boolean,
                nullable=False)
     )
 
-
-mapper(
-    GDPRAccept,
-    gdpr_accept_table,
-)
+    mapper(
+        GDPRAccept,
+        gdpr_accept_table,
+    )
 
 
 class GDPRPolicy(DomainObject):
@@ -137,8 +155,51 @@ def define_gdpr_policy_table():
                nullable=False),
     )
 
+    mapper(
+        GDPRPolicy,
+        gdpr_policy_table,
+    )
 
-mapper(
-    GDPRPolicy,
-    define_gdpr_policy_table,
-)
+
+class GDPR(DomainObject):
+    @classmethod
+    def filter(cls, **kwargs):
+        return Session.query(cls).filter_by(**kwargs)
+
+    @classmethod
+    def exists(cls, **kwargs):
+        if cls.filter(**kwargs).first():
+            return True
+        else:
+            return False
+
+    @classmethod
+    def get(cls, **kwargs):
+        instance = cls.filter(**kwargs).first()
+        return instance
+
+    @classmethod
+    def create(cls, **kwargs):
+        instance = cls(**kwargs)
+        Session.add(instance)
+        Session.commit()
+        return instance.as_dict()
+
+
+def define_gdpr_table():
+    global gdpr_table
+
+    gdpr_table = Table(
+        'gdpr', metadata,
+        Column('id', types.Integer,
+               primary_key=True,
+               nullable=False,
+               autoincrement=True),
+        Column('tos', types.UnicodeText,
+               nullable=False),
+    )
+
+    mapper(
+        GDPR,
+        gdpr_table,
+    )

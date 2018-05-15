@@ -1,6 +1,6 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
-from ckan.logic.create import user_create
+from ckan.logic.action.create import user_create
 from ckanext.gdpr.model import setup as model_setup
 
 
@@ -12,7 +12,7 @@ class GdprPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(plugins.IActions, inherit=True)
-    plugins.implements(plugins.IConfigurable, inherit=True)
+    plugins.implements(plugins.IConfigurable)
 
     # IConfigurer
 
