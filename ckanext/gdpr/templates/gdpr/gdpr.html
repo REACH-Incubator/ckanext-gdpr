@@ -13,37 +13,54 @@
       <h1 class="page-heading">
         {% block page_heading %}{{ _('Define the Terms of Service') }}{% endblock %}
       </h1>
-      <form action="POST" class="form-horizontal">
+      <form method="POST" class="form-horizontal">
         <div class="control-group">
           <label class="control-label" for="tos">Terms of Service</label>
           <div class="controls">
-            <textarea class="form-control" style="min-width: 80%" id="tos" placeholder="Enter your TOS here..." rows="5" cols="20">{{ c.tos }}</textarea>
+            <textarea class="form-control" name="tos" style="min-width: 80%" id="tos" placeholder="Enter your TOS here..." rows="5" cols="20">{{ c.tos }}</textarea>
           </div>
         </div>
         <div id="policies">
           <legend>Policies <button type="button" class="btn btn-success" onclick="javascript:addPolicy();"><i class="fa fa-plus" aria-hidden="true"></i></button></legend>
           {% if c.policies %}
             {% for policy in c.policies %}
-              {{ policy }}
+              <div>
+                <div class="control-group">
+                  <label class="control-label" for="{{policy.id}}">Policy</label>
+                  <div class="controls">
+                    <input type="text" name="{{policy.id}}" id="{{policy.id}}" placeholder="Describe here your policy..." style="min-width: 80%" value="{{policy.content}}">
+                  </div>
+                </div>
+                <div class="control-group">
+                  <div class="controls">
+                    <label class="checkbox">
+                      <input name= "required-{{policy.id}}" id="policy-{{policy.id}}-required" type="checkbox"> Required
+                    </label>
+                  </div>
+                </div>
+              </div>
             {% endfor %}
           {% else %}
             <div id="group-policy-0">
               <div class="control-group">
                 <label class="control-label" for="policy-0">Policy</label>
                 <div class="controls">
-                  <input type="text" id="policy-0" placeholder="Describe here your policy..." style="min-width: 80%">
+                  <input type="text" name="policy-0" id="policy-0" placeholder="Describe here your policy..." style="min-width: 80%">
                   <button type="button" class="btn btn-danger" onclick="javascript:removePolicy('group-policy-0')"><i class="fa fa-minus" aria-hidden="true"></i></button>
                 </div>
               </div>
               <div class="control-group">
                 <div class="controls">
                   <label class="checkbox">
-                    <input type="checkbox"> Required
+                    <input name= "required-policy-0" id="policy-0-required" type="checkbox"> Required
                   </label>
                 </div>
               </div>
             </div>
           {% endif %}
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Save changes</button>
         </div>
       </form>
       {% endblock %}
@@ -78,14 +95,14 @@
         <div class="control-group" id="group-policy-${policyCounter}">
           <label class="control-label" for="policy-${policyCounter}">Policy</label>
           <div class="controls">
-            <input type="text" id="policy-${policyCounter}" placeholder="Describe here your policy..." style="min-width: 80%">
+            <input type="text" name="policy-${policyCounter}" id="policy-${policyCounter}" placeholder="Describe here your policy..." style="min-width: 80%">
             <button type="button" class="btn btn-danger" onclick="javascript:removePolicy('group-policy-${policyCounter}')"><i class="fa fa-minus" aria-hidden="true"></i></button>
           </div>
         </div>
         <div class="control-group">
           <div class="controls">
             <label class="checkbox">
-              <input type="checkbox"> Required
+              <input name= "required-policy-${policyCounter}" id="policy-${policyCounter}-required" type="checkbox"> Required
             </label>
           </div>
         </div>

@@ -134,6 +134,14 @@ class GDPRPolicy(DomainObject):
         Session.commit()
         return instance.as_dict()
 
+    @classmethod
+    def delete(cls, **kwargs):
+        instance = cls(**kwargs)
+        Session.delete(instance)
+        Session.flush()
+        Session.commit()
+        return None
+
 
 def define_gdpr_policy_table():
     global gdpr_policy_table
