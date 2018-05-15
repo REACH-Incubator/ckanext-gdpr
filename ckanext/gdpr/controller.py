@@ -4,8 +4,9 @@ import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 from ckan.common import c, request
 from ckan.controllers.user import UserController
+from ckan.model.user import User
 from ckanext.gdpr import schema
-from ckanext.gdpr.model import GDPR, GDPRPolicy
+from ckanext.gdpr.model import GDPR, GDPRAccept, GDPRPolicy
 from pylons.controllers.util import redirect
 
 log = logging.getLogger(__name__)
@@ -70,3 +71,21 @@ class GDPRController(toolkit.BaseController):
             model.repo.commit()
 
             return redirect('/gdpr')
+
+    def policies(self):
+        gdpr = GDPR.get()
+        c.policies = GDPRPolicy.filter(gdpr_id=gdpr.id).order_by(GDPRPolicy.id)
+
+        return toolkit.render('gdpr/policies.html')
+
+    def policy(self, policy_id):
+        c.policy = GDPRPolicy.get(id=policy_id)
+        accepted_policy = GDPRAccept.filter(policy_id=c.policy.id)
+        c.accepting_users = []
+        for policy in accepted_policy:
+            c.accepting_users.append(User.get(policy.user_id))
+
+        c.not_accepting_users = [
+            item for item in User.all() if item not in c.accepting_users]
+
+        return toolkit.render('gdpr/policy.html')

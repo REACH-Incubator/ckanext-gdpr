@@ -1,0 +1,65 @@
+{% extends 'page.html' %}
+
+{% block subtitle %}{{ _('Policies') }}{% endblock %}
+
+{% block breadcrumb_content %}
+  <li>{{ h.nav_link(_('Terms of Service'), controller='ckanext.gdpr.controller:GDPRController', action='gdpr') }}</li>
+  <li>{{ h.nav_link(_('Policies'), controller='ckanext.gdpr.controller:GDPRController', action='policies') }}</li>
+  <li class="active">{{ h.nav_link(_('Policy'), controller='ckanext.gdpr.controller:GDPRController', action='policy', policy_id=c.policy.id) }}</li>
+
+{% endblock %}
+
+{% block primary_content %}
+  <article class="module">
+    <div class="module-content">
+      {% block primary_content_inner %}
+      <h1 class="page-heading">
+        {% block page_heading %}{{ c.policy.content }}{% endblock %}
+      </h1>
+      <h2>{{ _('Users accepting the policy') }}</h2>
+      <table class="table table-striped">
+         <thead>
+           <tr>
+             <th>#</th>
+             <th>User</th>
+             <th>e-mail</th>
+             <th>Policy Accepted</th>
+          </tr>
+         </thead>
+         <tbody>
+           {% for user in c.accepting_users %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>True</td>
+              </tr>
+           {% endfor %}
+         </tbody>
+      </table>
+
+      <h2>{{ _('Users not accepting the policy') }}</h2>
+      <table class="table table-striped">
+         <thead>
+           <tr>
+             <th>#</th>
+             <th>User</th>
+             <th>e-mail</th>
+             <th>Policy Accepted</th>
+          </tr>
+         </thead>
+         <tbody>
+           {% for user in c.not_accepting_users %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>False</td>
+              </tr>
+           {% endfor %}
+         </tbody>
+      </table>
+    {% endblock %}
+    </div>
+  </article>
+{% endblock %}

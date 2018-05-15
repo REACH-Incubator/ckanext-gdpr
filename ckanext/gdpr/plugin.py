@@ -1,11 +1,11 @@
 import logging
 
+import ckan.model as model
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.create import user_create
 from ckanext.gdpr.model import setup as model_setup
-from ckanext.gdpr.model import GDPR, GDPRPolicy, GDPRAccept
-import ckan.model as model
+from ckanext.gdpr.model import GDPR, GDPRAccept, GDPRPolicy
 
 log = logging.getLogger(__name__)
 
@@ -50,6 +50,12 @@ class GdprPlugin(plugins.SingletonPlugin):
         map.connect('/gdpr',
                     controller='ckanext.gdpr.controller:GDPRController',
                     action='gdpr')
+        map.connect('/gdpr/policy',
+                    controller='ckanext.gdpr.controller:GDPRController',
+                    action='policies')
+        map.connect('/gdpr/policy/{policy_id}',
+                    controller='ckanext.gdpr.controller:GDPRController',
+                    action='policy')
 
         return map
 
