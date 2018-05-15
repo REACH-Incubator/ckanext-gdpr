@@ -27,17 +27,20 @@
               {{ policy }}
             {% endfor %}
           {% else %}
-            <div class="control-group">
-              <label class="control-label" for="policy-0">New Policy</label>
-              <div class="controls">
-                <input type="text" id="policy-0" placeholder="Describe here your policy..." style="min-width: 80%">
+            <div id="group-policy-0">
+              <div class="control-group">
+                <label class="control-label" for="policy-0">Policy</label>
+                <div class="controls">
+                  <input type="text" id="policy-0" placeholder="Describe here your policy..." style="min-width: 80%">
+                  <button type="button" class="btn btn-danger" onclick="javascript:removePolicy('group-policy-0')"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                </div>
               </div>
-            </div>
-            <div class="control-group">
-              <div class="controls">
-                <label class="checkbox">
-                  <input type="checkbox"> Required
-                </label>
+              <div class="control-group">
+                <div class="controls">
+                  <label class="checkbox">
+                    <input type="checkbox"> Required
+                  </label>
+                </div>
               </div>
             </div>
           {% endif %}
@@ -71,17 +74,20 @@
 
     function addPolicy() {
       var policyHTML = `
-      <div class="control-group">
-        <label class="control-label" for="policy-${policyCounter}">New Policy</label>
-        <div class="controls">
-          <input type="text" id="policy-${policyCounter}" placeholder="Describe here your policy..." style="min-width: 80%">
+      <div id="group-policy-${policyCounter}">
+        <div class="control-group" id="group-policy-${policyCounter}">
+          <label class="control-label" for="policy-${policyCounter}">Policy</label>
+          <div class="controls">
+            <input type="text" id="policy-${policyCounter}" placeholder="Describe here your policy..." style="min-width: 80%">
+            <button type="button" class="btn btn-danger" onclick="javascript:removePolicy('group-policy-${policyCounter}')"><i class="fa fa-minus" aria-hidden="true"></i></button>
+          </div>
         </div>
-      </div>
-      <div class="control-group">
-        <div class="controls">
-          <label class="checkbox">
-            <input type="checkbox"> Required
-          </label>
+        <div class="control-group">
+          <div class="controls">
+            <label class="checkbox">
+              <input type="checkbox"> Required
+            </label>
+          </div>
         </div>
       </div>
       `;
@@ -89,5 +95,10 @@
       $('#policies').append(policyHTML);
       policyCounter += 1;
     }
+
+    function removePolicy(groupID) {
+      $("#".concat(groupID)).remove();
+    }
+
   </script>
 {% endblock %}
