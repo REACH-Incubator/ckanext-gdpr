@@ -1,5 +1,6 @@
 import logging
 
+import ckan.lib.helpers as h
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 from ckan.common import c, request
@@ -19,6 +20,16 @@ class GDPRUserController(UserController):
     def _save_new(self, context):
         context['schema'] = schema.user_new_form_schema()
         return UserController._save_new(self, context)
+
+    def edit_me(self, locale=None):
+        if not c.user:
+            h.redirect_to(locale=locale, controller='user', action='login',
+                          id=None)
+        user_ref = c.userobj.get_reference_preferred_for_uri()
+        h.redirect_to(locale=locale,
+                      controller='ckanext.gdpr.controller:GDPRUserController',
+                      action='edit',
+                      id=user_ref)
 
 
 class GDPRController(toolkit.BaseController):

@@ -79,6 +79,9 @@ class GdprPlugin(plugins.SingletonPlugin):
         map.connect('/user/register',
                     controller='ckanext.gdpr.controller:GDPRUserController',
                     action='register')
+        map.connect('/user/edit/me',
+                    controller='ckanext.gdpr.controller:GDPRUserController',
+                    action='edit_me')
         map.connect('/user/edit/{id}',
                     controller='ckanext.gdpr.controller:GDPRUserController',
                     action='edit')

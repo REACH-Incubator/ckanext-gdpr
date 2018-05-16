@@ -7,13 +7,14 @@ from ckan.logic.validators import (ignore_not_sysadmin, name_validator,
                                    user_password_validator,
                                    user_passwords_match)
 from ckanext.gdpr.model import GDPR, GDPRPolicy
-from ckanext.gdpr.validators import gdpr_accepted
+from ckanext.gdpr.validators import gdpr_accepted, not_me
 
 
 def default_user_schema():
     schema = {
         'id': [ignore_missing, unicode],
-        'name': [not_empty, name_validator, user_name_validator, unicode],
+        'name': [not_empty, name_validator, user_name_validator, not_me,
+                 unicode],
         'fullname': [ignore_missing, unicode],
         'password': [user_password_validator, user_password_not_empty,
                      ignore_missing, unicode],
