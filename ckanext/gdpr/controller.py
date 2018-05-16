@@ -1,9 +1,11 @@
 import logging
 
+import ckan.authz as authz
+import ckan.lib.base as base
 import ckan.lib.helpers as h
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
-from ckan.common import c, request
+from ckan.common import _, c, request
 from ckan.controllers.user import UserController
 from ckan.model.user import User
 from ckanext.gdpr import schema
@@ -11,6 +13,8 @@ from ckanext.gdpr.model import GDPR, GDPRAccept, GDPRPolicy
 from pylons.controllers.util import redirect
 
 log = logging.getLogger(__name__)
+
+abort = base.abort
 
 
 class GDPRUserController(UserController):
@@ -35,6 +39,9 @@ class GDPRUserController(UserController):
 class GDPRController(toolkit.BaseController):
 
     def gdpr(self):
+        if not authz.is_sysadmin(c.user):
+            abort(403, _('Unauthorized'))
+
         gdpr = GDPR.get()
         if request.method == 'GET':
             c.tos = ''
@@ -85,12 +92,16 @@ class GDPRController(toolkit.BaseController):
             return redirect('/gdpr')
 
     def policies(self):
+        if not authz.is_sysadmin(c.user):
+            abort(403, _('Unauthorized'))
         gdpr = GDPR.get()
         c.policies = GDPRPolicy.filter(gdpr_id=gdpr.id).order_by(GDPRPolicy.id)
 
         return toolkit.render('gdpr/policies.html')
 
     def policy(self, policy_id):
+        if not authz.is_sysadmin(c.user):
+            abort(403, _('Unauthorized'))
         c.policy = GDPRPolicy.get(id=policy_id)
         accepted_policy = GDPRAccept.filter(policy_id=c.policy.id)
         c.accepting_users = []
