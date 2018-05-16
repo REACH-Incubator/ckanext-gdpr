@@ -1,3 +1,5 @@
+import csv
+import io
 import logging
 
 import ckan.authz as authz
@@ -5,7 +7,7 @@ import ckan.lib.base as base
 import ckan.lib.helpers as h
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
-from ckan.common import _, c, request
+from ckan.common import _, c, request, response
 from ckan.controllers.user import UserController
 from ckan.model.user import User
 from ckanext.gdpr import schema
@@ -112,3 +114,43 @@ class GDPRController(toolkit.BaseController):
             item for item in User.all() if item not in c.accepting_users]
 
         return toolkit.render('gdpr/policy.html')
+
+    def policy_csv(self):
+        if not authz.is_sysadmin(c.user):
+            abort(403, _('Unauthorized'))
+
+        with io.BytesIO() as csvfile:
+            fieldnames = ['user_id', 'username', 'email']
+
+            gdpr = GDPR.get()
+            policies = GDPRPolicy.filter(gdpr_id=gdpr.id)
+            for policy in policies:
+                fieldname = policy.content
+                if policy.required:
+                    fieldname += '*'
+                fieldnames.append(fieldname)
+
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+
+            for user in User.all():
+                csv_dict = {'user_id': user.id, 'username': user.name,
+                            'email': user.email}
+
+                policies = GDPRPolicy.filter(gdpr_id=gdpr.id)
+                for policy in policies:
+                    user_accept = GDPRAccept.get(policy_id=policy.id,
+                                                 user_id=user.id)
+                    accepted = False
+                    if user_accept is not None:
+                        accepted = True
+
+                    fieldname = policy.content
+                    if policy.required:
+                        fieldname += '*'
+                    csv_dict[fieldname] = accepted
+
+                writer.writerow(csv_dict)
+
+            response.headers['Content-type'] = 'text/csv'
+            return csvfile.getvalue()

@@ -19,6 +19,7 @@
           <li><a href="/gdpr/policy/{{ policy.id }}">{{ policy.content }}</a></li>
         {% endfor %}
       </ul>
+      <h2>{{ h.nav_link(_('Download policy stats'), controller='ckanext.gdpr.controller:GDPRController', action='policy_csv') }}</h2>
       {% endblock %}
     </div>
   </article>

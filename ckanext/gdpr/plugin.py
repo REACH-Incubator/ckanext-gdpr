@@ -94,6 +94,9 @@ class GdprPlugin(plugins.SingletonPlugin):
         map.connect('/gdpr/policy/{policy_id}',
                     controller='ckanext.gdpr.controller:GDPRController',
                     action='policy')
+        map.connect('/gdpr/csv',
+                    controller='ckanext.gdpr.controller:GDPRController',
+                    action='policy_csv')
 
         return map
 
