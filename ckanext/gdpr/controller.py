@@ -56,7 +56,7 @@ class GDPRController(toolkit.BaseController):
         if request.method == 'POST':
             log.debug(request.POST)
             if gdpr is None:
-                GDPR.create(
+                gdpr = GDPR.create(
                     tos=request.POST.get('tos')
                 )
             else:
