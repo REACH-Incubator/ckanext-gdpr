@@ -59,12 +59,17 @@ def check_user_accepted_policy(user_id, policy_id):
     return False
 
 
+def user_list(context, data_dict):
+    return {'success': False}
+
+
 class GdprPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(plugins.IActions, inherit=True)
     plugins.implements(plugins.IConfigurable)
     plugins.implements(plugins.ITemplateHelpers)
+    plugins.implements(plugins.IAuthFunctions, inherit=True)
 
     # IConfigurer
 
@@ -117,3 +122,8 @@ class GdprPlugin(plugins.SingletonPlugin):
         return {'get_gdpr': get_gdpr,
                 'get_policies': get_policies,
                 'check_user_accepted_policy': check_user_accepted_policy}
+
+    # IAuthFunctions
+
+    def get_auth_functions(self):
+        return {'user_list': user_list}
