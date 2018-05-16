@@ -5,6 +5,7 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.create import user_create
 from ckan.logic.action.update import user_update
+from ckanext.gdpr import schema
 from ckanext.gdpr.model import setup as model_setup
 from ckanext.gdpr.model import GDPR, GDPRAccept, GDPRPolicy
 
@@ -22,6 +23,7 @@ def gdpr_user_create(context, data_dict):
 
 
 def gdpr_user_update(context, data_dict):
+    context['schema'] = schema.default_update_user_schema()
     user_dict = user_update(context, data_dict)
     gdpr_accept_list = GDPRAccept.filter(user_id=user_dict['id'])
     delete_list = []

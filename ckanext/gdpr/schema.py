@@ -44,3 +44,13 @@ def user_new_form_schema():
     schema['password2'] = [unicode]
 
     return schema
+
+
+def default_update_user_schema():
+    schema = default_user_schema()
+
+    schema['name'] = [ignore_missing, name_validator, user_name_validator,
+                      unicode]
+    schema['password'] = [user_password_validator, ignore_missing, unicode]
+
+    return schema
