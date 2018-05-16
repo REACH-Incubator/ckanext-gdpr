@@ -80,6 +80,13 @@ class GDPRAccept(DomainObject):
         Session.commit()
         return instance.as_dict()
 
+    @classmethod
+    def delete(cls, **kwargs):
+        instance = GDPRAccept.get(**kwargs)
+        Session.delete(instance)
+        Session.commit()
+        return None
+
 
 def define_gdpr_accept_table():
     global gdpr_accept_table
@@ -134,7 +141,7 @@ class GDPRPolicy(DomainObject):
 
     @classmethod
     def delete(cls, **kwargs):
-        instance = cls(**kwargs)
+        instance = GDPRPolicy.get(**kwargs)
         Session.delete(instance)
         Session.flush()
         Session.commit()

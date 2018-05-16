@@ -4,6 +4,7 @@ import ckan.model as model
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.create import user_create
+from ckan.logic.action.update import user_update
 from ckanext.gdpr.model import setup as model_setup
 from ckanext.gdpr.model import GDPR, GDPRAccept, GDPRPolicy
 
@@ -16,7 +17,33 @@ def gdpr_user_create(context, data_dict):
         if key.startswith('policy-'):
             policy_id = int(key.replace('policy-', ''))
             GDPRAccept.create(user_id=user_dict['id'], policy_id=policy_id)
-    model.repo.commit()
+        model.repo.commit()
+    return user_dict
+
+
+def gdpr_user_update(context, data_dict):
+    user_dict = user_update(context, data_dict)
+    log.debug(data_dict)
+    gdpr_accept_list = GDPRAccept.filter(user_id=user_dict['id'])
+    delete_list = []
+    for gdpr_accept in gdpr_accept_list:
+        if 'policy-{}'.format(gdpr_accept.policy_id) not in data_dict.keys():
+            delete_list.append(gdpr_accept.id)
+
+    for _id in delete_list:
+        log.debug(_id)
+        log.debug(GDPRAccept.get(id=_id))
+        GDPRAccept.delete(id=_id)
+
+    for key, value in data_dict.items():
+        if key.startswith('policy-'):
+            log.debug(key)
+            policy_id = int(key.replace('policy-', ''))
+            log.debug(GDPRAccept.get(user_id=user_dict['id'], policy_id=policy_id))
+            if GDPRAccept.get(user_id=user_dict['id'], policy_id=policy_id) is None:
+                GDPRAccept.create(user_id=user_dict['id'], policy_id=policy_id)
+                model.repo.commit()
+    return user_dict
 
 
 def get_gdpr():
@@ -72,7 +99,8 @@ class GdprPlugin(plugins.SingletonPlugin):
     # IActions
 
     def get_actions(self):
-        return {'user_create': gdpr_user_create}
+        return {'user_create': gdpr_user_create,
+                'user_update': gdpr_user_update}
 
     # IConfigurable
 
