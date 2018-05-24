@@ -1,3 +1,4 @@
+import datetime
 import logging
 
 import ckan.model as model
@@ -17,7 +18,8 @@ def gdpr_user_create(context, data_dict):
     for key, value in data_dict.items():
         if key.startswith('policy-'):
             policy_id = int(key.replace('policy-', ''))
-            GDPRAccept.create(user_id=user_dict['id'], policy_id=policy_id)
+            GDPRAccept.create(user_id=user_dict['id'], policy_id=policy_id,
+                              datetime=datetime.datetime.now())
         model.repo.commit()
     return user_dict
 
@@ -39,7 +41,8 @@ def gdpr_user_update(context, data_dict):
             policy_id = int(key.replace('policy-', ''))
             if GDPRAccept.get(user_id=user_dict['id'],
                               policy_id=policy_id) is None:
-                GDPRAccept.create(user_id=user_dict['id'], policy_id=policy_id)
+                GDPRAccept.create(user_id=user_dict['id'], policy_id=policy_id,
+                                  datetime=datetime.datetime.now())
                 model.repo.commit()
     return user_dict
 

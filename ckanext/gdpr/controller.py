@@ -61,6 +61,7 @@ class GDPRController(toolkit.BaseController):
                 gdpr = GDPR.create(
                     tos=request.POST.get('tos')
                 )
+                gdpr = GDPR.get()
             else:
                 gdpr.tos = request.POST.get('tos')
 

@@ -13,8 +13,10 @@
 
   <div class="control-group control-full">
     <label class="control-label" for="field-gdpr-text">Terms of use</label>
-    <div class="controls ">
-      <textarea id="field-gdpr-text" name="gdpr-text" cols="20" rows="15" placeholder="" readonly="True">{{h.get_gdpr().tos}}</textarea>
+    <div class="controls">
+      <div style="width: 500px;height: 300px;overflow: auto;">
+        {{ h.get_gdpr().tos | safe }}
+      </div>
     </div>
   </div>
 
@@ -23,7 +25,7 @@
       <div class="controls">
         <label class="checkbox" for="field-terms-of-use">
           <input name="policy-{{ policy.id }}" id="policy-{{ policy.id }}" value="True" type="checkbox">
-          {{ policy.content }}
+          {{ policy.content | safe }}
           {% if policy.required %}
             <span title="This field is required" class="control-required">*</span>
           {% endif %}
