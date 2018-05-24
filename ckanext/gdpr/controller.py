@@ -6,6 +6,7 @@ import ckan.authz as authz
 import ckan.lib.base as base
 import ckan.lib.helpers as h
 import ckan.model as model
+import ckan.plugins as p
 import ckan.plugins.toolkit as toolkit
 from ckan.common import _, c, request, response
 from ckan.controllers.user import UserController
@@ -36,6 +37,32 @@ class GDPRUserController(UserController):
                       controller='ckanext.gdpr.controller:GDPRUserController',
                       action='edit',
                       id=user_ref)
+
+    def login(self, error=None):
+        # Do any plugin login stuff
+        for item in p.PluginImplementations(p.IAuthenticator):
+            item.login()
+
+        if 'error' in request.params:
+            h.flash_error(request.params['error'])
+
+        came_from = request.params.get('came_from')
+
+        if not c.user:
+            if not came_from:
+                came_from = h.url_for(controller='user', action='logged_in')
+            c.login_handler = h.url_for(
+                self._get_repoze_handler('login_handler_path'),
+                came_from=came_from)
+            if error:
+                vars = {'error_summary': {'': error}}
+            else:
+                vars = {}
+            return toolkit.render('user/login.html', extra_vars=vars)
+        elif came_from:
+            return redirect(came_from)
+        else:
+            return toolkit.render('user/logout_first.html')
 
 
 class GDPRController(toolkit.BaseController):
