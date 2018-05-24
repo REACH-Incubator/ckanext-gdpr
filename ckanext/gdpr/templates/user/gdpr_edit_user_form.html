@@ -46,7 +46,7 @@
         <div class="controls">
           <label class="checkbox" for="field-terms-of-use">
             <input name="policy-{{ policy.id }}" id="policy-{{ policy.id }}" value="True" type="checkbox" {% if h.check_user_accepted_policy(c.userobj.id, policy.id) %} checked{% endif %}>
-            {{ policy.content }}
+            {{ policy.content | safe }}
             {% if policy.required %}
               <span title="This field is required" class="control-required">*</span>
             {% endif %}
