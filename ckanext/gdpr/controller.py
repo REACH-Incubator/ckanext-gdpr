@@ -126,7 +126,7 @@ class GDPRController(toolkit.BaseController):
             gdpr = GDPR.get()
             policies = GDPRPolicy.filter(gdpr_id=gdpr.id)
             for policy in policies:
-                fieldname = policy.content
+                fieldname = 'policy_id_{}'.format(policy.id)
                 if policy.required:
                     fieldname += '*'
                 fieldnames.append(fieldname)
@@ -146,7 +146,7 @@ class GDPRController(toolkit.BaseController):
                     if user_accept is not None:
                         accepted = True
 
-                    fieldname = policy.content
+                    fieldname = 'policy_id_{}'.format(policy.id)
                     if policy.required:
                         fieldname += '*'
                     csv_dict[fieldname] = accepted
