@@ -5,6 +5,9 @@ import logging
 import ckan.authz as authz
 import ckan.lib.base as base
 import ckan.lib.helpers as h
+import ckan.lib.mailer as mailer
+import ckan.lib.navl.dictization_functions as dictization_functions
+import ckan.logic as logic
 import ckan.model as model
 import ckan.plugins as p
 import ckan.plugins.toolkit as toolkit
@@ -37,6 +40,62 @@ class GDPRUserController(UserController):
                       controller='ckanext.gdpr.controller:GDPRUserController',
                       action='edit',
                       id=user_ref)
+
+    def perform_reset(self, id):
+        # FIXME 403 error for invalid key is a non helpful page
+        context = {'model': model, 'session': model.Session,
+                   'user': id,
+                   'keep_email': True}
+
+        try:
+            logic.check_access('user_reset', context)
+        except logic.NotAuthorized:
+            abort(403, _('Unauthorized to reset password.'))
+
+        try:
+            data_dict = {'id': id}
+            user_dict = logic.get_action('user_show')(context, data_dict)
+
+            user_obj = context['user_obj']
+        except logic.NotFound, e:
+            abort(404, _('User not found'))
+
+        c.reset_key = request.params.get('key')
+        if not mailer.verify_reset_link(user_obj, c.reset_key):
+            h.flash_error(_('Invalid reset key. Please try again.'))
+            abort(403)
+
+        if request.method == 'POST':
+            try:
+                context['reset_password'] = True
+                new_password = self._get_form_password()
+                user_dict['password'] = new_password
+                user_dict['reset_key'] = c.reset_key
+                user_dict['state'] = model.State.ACTIVE
+
+                # Include policies into user dict
+                for key in request.params:
+                    if key.startswith('policy-'):
+                        user_dict[key] = request.params.getone(key)
+
+                user = logic.get_action('user_update')(context, user_dict)
+                mailer.create_reset_key(user_obj)
+
+                h.flash_success(_("Your password has been reset."))
+                h.redirect_to('/')
+            except logic.NotAuthorized:
+                h.flash_error(_('Unauthorized to edit user %s') % id)
+            except logic.NotFound, e:
+                h.flash_error(_('User not found'))
+            except dictization_functions.DataError:
+                h.flash_error(_(u'Integrity Error'))
+            except logic.ValidationError, e:
+                h.flash_error(u'%r' % e.error_dict)
+            except ValueError, ve:
+                h.flash_error(unicode(ve))
+
+        c.user_dict = user_dict
+        return toolkit.render('user/perform_reset.html')
 
     def login(self, error=None):
         # Do any plugin login stuff

@@ -96,6 +96,9 @@ class GdprPlugin(plugins.SingletonPlugin):
         map.connect('/user/login',
                     controller='ckanext.gdpr.controller:GDPRUserController',
                     action='login')
+        map.connect('/user/reset/{id}',
+                    controller='ckanext.gdpr.controller:GDPRUserController',
+                    action='perform_reset')
         map.connect('/gdpr',
                     controller='ckanext.gdpr.controller:GDPRController',
                     action='gdpr')

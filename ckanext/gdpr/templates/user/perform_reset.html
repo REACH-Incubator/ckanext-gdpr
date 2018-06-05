@@ -1,0 +1,30 @@
+{% ckan_extends %}
+
+{% block form %}
+  <form class="form-horizontal" action="" method="post">
+    {{ form.errors(error_summary) }}
+    {{ form.input("password1", id="field-password", label=_("Password"), type="password", value='', error='', attrs={'autocomplete': 'no'}, classes=["control-medium"]) }}
+    {{ form.input("password2", id="field-confirm-password", label=_("Confirm"), type="password", value='', error='', attrs={'autocomplete': 'no'}, classes=["control-medium"]) }}
+
+    {% for policy in h.get_policies(h.get_gdpr().id) %}
+      <div class="control-group">
+        <div class="controls">
+          <label class="checkbox" for="field-terms-of-use">
+            <input name="policy-{{ policy.id }}" id="policy-{{ policy.id }}" value="True" type="checkbox">
+            {{ policy.content | safe }}
+            {% if policy.required %}
+              <span title="This field is required" class="control-required">*</span>
+            {% endif %}
+          </label>
+        </div>
+      </div>
+    {% endfor %}
+
+
+    <div class="form-actions">
+      {% block form_button %}
+      <button class="btn btn-primary" type="submit" name="save">{{ _("Update Password") }}</button>
+      {% endblock %}
+    </div>
+  </form>
+{% endblock %}
