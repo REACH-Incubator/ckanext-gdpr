@@ -1,0 +1,59 @@
+{% extends 'page.html' %}
+
+{% block subtitle %}{{ _('EDI Privacy Policy for the EDI Data Catalogue') }}{% endblock %}
+
+{% block breadcrumb_content %}
+  <li class="active">{{ h.nav_link(_('Privacy Policy'), controller='ckanext.gdpr.controller:GDPRController', action='privacy') }}</li>
+{% endblock %}
+
+{% block primary_content %}
+<article class="module">
+  <div class="module-content">
+    {% block primary_content_inner %}
+    <h1 class="page-heading">
+      {% block page_heading %}{{ _('EDI Privacy Policy for the EDI Data Catalogue') }}{% endblock %}
+    </h1>
+
+    <p><h2>Controller &ndash; Who is the controller of the personal data that you supply?</h2></p>
+    <ul>
+    <li style="font-weight: 400;"><span style="font-weight: 400;">UNIVERSITY OF DEUSTO</span></li>
+    <li style="font-weight: 400;"><span style="font-weight: 400;">NIF ES 34 R4868004E</span></li>
+    <li style="font-weight: 400;"><strong><em>Email contact: </em></strong><a href="mailto:privacidad@deusto.es"><span style="font-weight: 400;">privacidad@deusto.es</span></a></li>
+    <li style="font-weight: 400;"><strong><em>Postal address: </em></strong><span style="font-weight: 400;">Avenida de las Universidades, 24-Bilbao (CP-48007)</span></li>
+    <li style="font-weight: 400;"><strong><em>Data Protection Officer (DPO): </em></strong></li>
+    </ul>
+    <address>
+      Audit and Internal Control Director<br />
+      Telephone: 94 413 94 30<br />
+      Email: &nbsp;dpo@deusto.es
+    </address>
+    <p><h2>Purpose &ndash; Why do we process your personal data? </h2></p>
+    <p><span style="font-weight: 400;">University of Deusto stores and processes the personal data you supply to manage the EDI incubation process for promoting Big Data experimentation in Europe. Aggregated data previously anonymized about collected information regarding EDI incubation will be generated and published publicly. </span></p>
+    <p><h2>Legal ground &ndash; What is the legal basis to process your personal data? </h2></p>
+    <p><span style="font-weight: 400;">By accepting our Terms of Service, we have entered a pre-contractual relationship by which we provide you access to the EDI Data Catalogue. Therefore, the legal basis for the processing of your personal data is the contractual necessity. </span></p>
+    <p><span style="font-weight: 400;">The provision of your personal data is optional, but in the absence of the requested data, we will be unable to provide you access to the EDI Data Catalogue.</span></p>
+    <p><span style="font-weight: 400;">If we send you any dissemination or communication information about our activities and services or carry out any profiling about your interactions with us, this will be exclusively about the EDI project.</span></p>
+    <p><h2>Data Recipients &ndash;Who will be the recipients of your personal data? </h2></p>
+    <p><span style="font-weight: 400;">Your personal data will be shared with Deusto Foundation, an entity based in Spain with a legal link to University of Deusto. Processing your request does not involve the transfer of your personal data to other third parties, unless otherwise provided by law. Nor does it involve the international transfer of said information. </span></p>
+    <p><h2>Preservation &ndash; How long will we keep your data?</h2></p>
+    <ul>
+    <li style="font-weight: 400;"><span style="font-weight: 400;">The gathered personal data will be kept during the lifetime to the EDI project.</span></li>
+    <li style="font-weight: 400;"><span style="font-weight: 400;">The data will be kept for statistical purposes and your personal details will be removed.</span></li>
+    <li style="font-weight: 400;"><span style="font-weight: 400;">The data needed to send communications related to the EDI project and profiles will be kept until the person concerned explicitly requests their records to be removed.</span></li>
+    </ul>
+    <p><h2>Rights &ndash; What are your rights when you supply your personal data to us? </h2></p>
+    <ul>
+    <li style="font-weight: 400;"><span style="font-weight: 400;">Any person has the right to obtain confirmation as to whether the University of Deusto is processing their personal data or not.</span></li>
+    <li style="font-weight: 400;"><span style="font-weight: 400;">The person concerned has the right to request access to their personal data, to request its rectification in case personal data is not accurate or, in its case, to request their removal when, among other reasons, data is no longer necessary for the purposes it was collected for.</span></li>
+    <li style="font-weight: 400;"><span style="font-weight: 400;">In some circumstances, the person concerned may request restriction of processing of their personal data. In such case, data will only be kept to process legal claims.</span></li>
+    <li style="font-weight: 400;"><span style="font-weight: 400;">In some circumstances and for reasons related to a specific situation, the person concerned can object to the processing of their personal data. University of Deusto will stop processing the data, unless there are legal grounds for the processing, or for the exercise or defense of legal claims.</span></li>
+    <li style="font-weight: 400;"><span style="font-weight: 400;">The person concerned can request data portability in order to obtain the data that they have supplied to University of Deusto in a structured manner, of common use and enabling mechanical processing, to be downloaded or communicated by University of Deusto to another entity.</span></li>
+    <li style="font-weight: 400;"><span style="font-weight: 400;">The person concerned can exercise his or her rights by sending an email to the following address </span><a href="mailto:privacidad@deusto.es"><span style="font-weight: 400;">privacidad@deusto.es</span></a><span style="font-weight: 400;">.</span></li>
+    <li style="font-weight: 400;"><span style="font-weight: 400;">Besides, the person concerned can file a complaint to the Spanish Data Protection Agency, especially in the event that their data protection rights have not been respected, in the postal and electronic address indicated in the web page </span><a href="http://www.agpd.es/"><span style="font-weight: 400;">www.agpd.es</span></a><span style="font-weight: 400;">.</span></li>
+    </ul>
+    <p><h2>Security &ndash; How is the data collected protected? </h2></p>
+    <p><span style="font-weight: 400;">Data will be treated in a confidential manner and subject to suitable technical and organizational safety measures to prevent alteration, loss or unauthorized access or processing.</span></p>
+    {% endblock %}
+  </div>
+</article>
+{% endblock %}

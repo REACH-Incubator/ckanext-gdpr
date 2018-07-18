@@ -241,3 +241,9 @@ class GDPRController(toolkit.BaseController):
 
             response.headers['Content-type'] = 'text/csv'
             return csvfile.getvalue()
+
+    def privacy(self):
+        return toolkit.render('gdpr/privacy.html')
+
+    def tos(self):
+        return toolkit.render('gdpr/tos.html')

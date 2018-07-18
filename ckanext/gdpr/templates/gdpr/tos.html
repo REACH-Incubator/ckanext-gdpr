@@ -1,0 +1,40 @@
+{% extends 'page.html' %}
+
+{% block subtitle %}{{ _('Data Catalogue Terms of Service') }}{% endblock %}
+
+{% block breadcrumb_content %}
+  <li class="active">{{ h.nav_link(_('Terms of Service'), controller='ckanext.gdpr.controller:GDPRController', action='tos') }}</li>
+{% endblock %}
+
+{% block primary_content %}
+<article class="module">
+  <div class="module-content">
+    {% block primary_content_inner %}
+    <h1 class="page-heading">
+      {% block page_heading %}{{ _('Data Catalogue Terms of Service') }}{% endblock %}
+    </h1>
+
+    <p><h2>Background and introduction</h2></p>
+    <p><span style="font-weight: 400;">EDI Data Catalogue is part of the European Data Incubator (EDI) project, funded by the European Union&rsquo;s Horizon 2020 research and innovation programme under grant agreement No 779790.</span></p>
+    <p><span style="font-weight: 400;">The European Data Incubator is a Big Data incubator offering a dedicated acceleration programme and up to &euro;100k equity free for EU based startups and teams. EDI defies Big Data innovators to sort out data -based challenges for a range of EU organizations in a myriad of sectors, or to propose their own concepts/ ideas making use of our Data Catalogue.</span></p>
+    <p><span style="font-weight: 400;">The Data Catalogue is stored and managed by:</span></p>
+    <address>
+      <strong>University of Deusto</strong><br />
+      Avda de las Universidades 24<br />
+      48007 Bilbao<br />
+      Spain
+    </address>
+    <p><span style="font-weight: 400;">Please read these Terms of Service carefully before you register to EDI Data Catalogue. By registering, you accept these Terms of Service and agree to comply with them.</span></p>
+    <p><h2>Use of the Data Catalogue</h2></p>
+    <p><span style="font-weight: 400;">Any use of the Data Catalogue and/or its contents must be lawful, authorized and ethical. You may not use the data contained in the Data Catalogue in an unlawful, unauthorized, or unethical manner. </span></p>
+    <p><span style="font-weight: 400;">In any event, the University of Deusto will not be held responsible for any abusive use of the Data Catalogue and/or its contents incurred into by you.</span></p>
+    <h2>Intellectual property rights</h2>
+    <p><span style="font-weight: 400;">The Access and use of the datasets contained in the Data Catalogue will not imply ownership of the datasets. Likewise, use of the datasets will not imply intellectual property rights on the Data Catalogue or the datasets. </span></p>
+    <h2>Personal Data</h2>
+    <p><span style="font-weight: 400;">The treatment of any personal data</span> <span style="font-weight: 400;">submitted in the registration to the Data Catalogue will be carried out in accordance with our </span><a href="/privacy"><strong>Privacy Policy for the Data Catalogue</strong></a><span style="font-weight: 400;">.</span></p>
+    <h2>Governing Law and Jurisdiction</h2>
+    <p><span style="font-weight: 400;">These terms of service shall be governed by and construed in accordance with the Spanish laws. Any dispute arising under these terms of service shall be subject to the exclusive jurisdiction of the Spanish courts. </span></p>
+    {% endblock %}
+  </div>
+</article>
+{% endblock %}
